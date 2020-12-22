@@ -9,6 +9,20 @@
 
 Как запускать:
 
+    надо нактить скрипты для базы из папки /db (сначала db.sql, потом остальные) на MySql
+
+    
+
+в MyController.py подставить свои данные для коннекта к базе :
+
+    app.config['MYSQL_DATABASE_USER'] = 'root'
+    app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
+    app.config['MYSQL_DATABASE_DB'] = 'matches'
+    app.config['MYSQL_DATABASE_HOST'] = 'mysql-reports.docker'
+
+
+Непостредственно запуск:
+
     export FLASK_APP=controllers/MainController.py
     export FLASK_ENV=development
     flask run
