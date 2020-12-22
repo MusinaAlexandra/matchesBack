@@ -29,7 +29,8 @@ def get_games():
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * from games")
+    sql = "select * FROM games g where weekofyear(g.game_date) = " + week;
+    cursor.execute(sql)
     games_data = cursor.fetchall()
 
     result = []

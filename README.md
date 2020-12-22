@@ -28,3 +28,7 @@
     flask run
 
 Если что смотреть тут: https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application
+
+## Основные endpoints:
+    - список мачей за 37 неделю года    http://localhost:5000/footbal?week=37
+(у нас есть данные за [37; 45] недели года)
