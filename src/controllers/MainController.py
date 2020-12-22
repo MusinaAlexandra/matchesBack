@@ -1,60 +1,54 @@
-from datetime import datetime
-
 from flask import Flask, jsonify, request
+from flaskext.mysql import MySQL
 
 app = Flask(__name__)
 
+mysql = MySQL()
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
+app.config['MYSQL_DATABASE_DB'] = 'matches'
+app.config['MYSQL_DATABASE_HOST'] = 'mysql-reports.docker'
+mysql.init_app(app)
+
+win_kind = {
+    'firstWin': 1,
+    'draw': 2,
+    'firstLoos': 3,
+}
+
+
 @app.route('/footbal')
-def hello_world():
+def get_games():
     week = request.args.get('week')
     win_kind = {
-        'firstWin' : 1,
-        'draw' : 2,
-        'firstLoos' : 3,
+        'firstWin': 1,
+        'draw': 2,
+        'firstLoos': 3,
     }
-    games = [
-        {
-            'date': datetime.now().strftime("%H:%M:%S"),
-            'firstPlayer': {
-                'id': 1,
-                'name': 'Renn',
-            },
-            'secondPlayer': {
-                'id': 2,
-                'name': 'Chelsi',
-            },
-            'result' : {
-                'win': 7.35,
-                'lose': 89.10,
-                'draw': 3.55,
-            },
-            'portfolio' : {
-                'firstName' : 'Krasnodar',
-                'secondName': 'Sevilia',
-                'kind': win_kind['draw']
-            },
-        },
-        {
-            'date': datetime.now().strftime("%H:%M:%S"),
-            'firstPlayer': {
-                'id': 3,
-                'name': 'Zenit',
-            },
-            'secondPlayer': {
-                'id': 4,
-                'name': 'Chelsi',
-            },
-            'result': {
-                'win': 7.35,
-                'lose': 89.10,
-                'draw': 3.55,
-            },
-            'portfolio': {
-                'firstName': 'Ural',
-                'secondName': 'Sevilia',
-                'kind': win_kind['firstWin']
-            },
-        },
 
-    ]
-    return jsonify(games)
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * from games")
+    games_data = cursor.fetchall()
+
+    result = []
+    for game in games_data:
+        result.append({
+            'date': game[1],
+            'first_player': game[2],
+            'second_player': game[3],
+            'kind': getKind(game[4])
+        })
+
+    return jsonify(result)
+
+
+def getKind(game_result):
+    count = game_result.split("-")
+    if (count[0] > count[1]):
+        return win_kind['firstWin']
+    if (count[0] < count[1]):
+        return win_kind['firstLoos']
+
+    return win_kind['draw']
