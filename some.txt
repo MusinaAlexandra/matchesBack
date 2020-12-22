@@ -1,0 +1,6 @@
+//*[@id="pf2"]/div[1]/div[5]    //*[@id="pf2"]/div[1]/div[7]    //*[@id="pf2"]/div[1]/div[11]
+//*[@id="pf3"]/div[1]/div[3]
+//*[@id="pf3"]/div[1]/div[43]
+//*[@id="pf4"]/div[1]/div[3]
+//*[@id="pf4"]/div[1]/div[46]
+
