@@ -39,7 +39,12 @@ def get_games():
             'date': game[1],
             'first_player': game[2],
             'second_player': game[3],
-            'kind': getKind(game[4])
+            'kind': getKind(game[4]),
+            'portfolio': {
+                'firstName': 'Krasnodar',
+                'secondName': 'Sevilia',
+                'kind': win_kind['draw']
+            }
         })
 
     return jsonify(result)
