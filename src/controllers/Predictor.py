@@ -52,17 +52,28 @@ def train_model(X, X_test, y, params, folds, plot_feature_importance=False, aver
         sns.barplot(x="importance", y="feature", data=best_features.sort_values(by="importance", ascending=False));
         plt.title('LGB Features (avg over folds)');
 
-        return oof, prediction, feature_importance, y_pred
-    return oof, prediction, scores, y_pred
+        return oof, prediction, feature_importance, y_pred, model
+    return oof, prediction, scores, y_pred, model
 
 def predict(games):
-    pass
     df = beforeFit()
-    oof_lgb, prediction_lgb, scores, y_pred = fit(df)
-    makePredict()
+    oof_lgb, prediction_lgb, scores, y_pred, model = fit(df)
+    makePredict(model, games)
     
-def makePredict():
-    pass
+def makePredict(model, data):
+    df2 = pd.DataFrame(data)
+
+    df2.head()
+
+    df2['Team1'] = 0
+    df2['Team2'] = 0
+    for i in range(len(df2)):
+      df2['Team1'][i] = teams_dict[df2['Team 1'][i]]
+      df2['Team2'][i] = teams_dict[df2['Team 2'][i]]
+    df2 = df2.drop(columns=['Team 1','Team 2'])
+
+    y_pr = model.predict(df2.drop(columns=['Team 1 Win']))
+    return y_pr
 
 def fit(df):
     n_fold = 5
